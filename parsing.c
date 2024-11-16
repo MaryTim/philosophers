@@ -52,7 +52,7 @@ int	*make_int_array(int argc, char **argv, int i)
 	while (argv[i])
 	{
 		nbr = ft_atol(argv[i]);
-		if (!check_min_max_int(nbr))
+		if (!check_max_int(nbr))
 		{
 			free(res);
 			return (NULL);
@@ -64,34 +64,48 @@ int	*make_int_array(int argc, char **argv, int i)
 	return (res);
 }
 
-int	*int_array_from_string(char	**split_res)
-{
-	int		*res;
-	int		j;
-	int		k;
-	long	nbr;
+// int	*int_array_from_string(char	**split_res)
+// {
+// 	int		*res;
+// 	int		j;
+// 	int		k;
+// 	long	nbr;
 
-	j = 0;
-	k = 0;
-	res = malloc(sizeof(int) * count_elements(split_res));
-	if (!res)
+// 	j = 0;
+// 	k = 0;
+// 	res = malloc(sizeof(int) * count_elements(split_res));
+// 	if (!res)
+// 		return (NULL);
+// 	while (split_res[j])
+// 	{
+// 		nbr = ft_atol(split_res[j]);
+// 		if (!check_min_max_int(nbr))
+// 		{
+// 			free(res);
+// 			return (NULL);
+// 		}
+// 		res[j] = (int)nbr;
+// 		j++;
+// 		k++;
+// 	}
+// 	return (res);
+// }
+
+int	init_input(t_data data, char *argv, int argc)
+{
+	int *result;
+	int i;
+
+	i = 0;
+	result = make_int_array(argc, argv, i);
+	if (!result)
 		return (NULL);
-	while (split_res[j])
-	{
-		nbr = ft_atol(split_res[j]);
-		if (!check_min_max_int(nbr))
-		{
-			free(res);
-			return (NULL);
-		}
-		res[j] = (int)nbr;
-		j++;
-		k++;
-	}
-	return (res);
-}
-
-void	check_input(t_data data, char *argv)
-{
-	
+	data->nbr_of_philo = result[0];
+	data->time_to_die = result[1] * 1000;
+	data->time_to_eat = result[2] * 1000;
+	data->time_to_sleep = result[3] * 1000;
+	if (result[4])
+		data->nbr_max_meals = result[4];
+	else
+		data->nbr_max_meals = -1;
 }

@@ -12,11 +12,33 @@
 
 #include "philo.h"
 
+// void initial_init_data(t_data data)
+// {
+// 	data.nbr_of_philo = 0;
+// 	data.time_to_die = 0;
+// 	data.time_to_eat = 0;
+// 	data.time_to_sleep = 0;
+// 	//data.nbr_max_meals = NULL;
+// }
+
 int	main(int argc, char **argv)
 {
+	t_data *data;
+
 	if ((argc == 5) || (argc == 6))
 	{
-		
+		data = malloc(sizeof(t_data));
+		if (!data)
+			return (error_handling("Memory allocation failed!"));
+		if (init_input(data, argv, argc) != -1)
+		{
+		printf("nbr of philo %ld\n", data->nbr_of_philo);
+		printf("time to die %ld\n", data->time_to_die);
+		printf("time to eat %ld\n", data->time_to_eat);
+		printf("time to sleep %ld\n", data->time_to_sleep);
+		printf("max meals %ld\n", data->nbr_max_meals);
+		}
+		free(data);
 	}
 	else
 		error_handling("Please check your input parameters!");

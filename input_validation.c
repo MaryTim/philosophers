@@ -12,53 +12,86 @@
 
 #include "philo.h"
 
-bool	is_digit(char c)
+bool	check_max_int(long l)
 {
-	return (c >= '0' && c <= '9');
+	if (l < 0|| l > INT_MAX)
+	{
+		error_handling("Please cmake sure your input params are within 0 and INT_MAX limits!");
+		return (false);
+	}
+	return (true);
 }
 
-bool	is_sign(char c)
+long	ft_atol(const char *str)
 {
-	return (c == '+' || c == '-');
-}
-
-bool	is_number(char *value)
-{
-	int	i;
+	int		i;
+	long	result;
+	long	isneg;
 
 	i = 0;
-	if (is_sign(value[i]) && value[i + 1])
+	result = 0;
+	isneg = 1;
+	if (str[i] == 0)
+		return (0);
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
 		i++;
-	while (value[i] && is_digit(value[i]))
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			isneg = -1;
 		i++;
-	if (value[i] && !is_digit(value[i]))
-		return (false);
-	else
-		return (true);
+	}
+	while (str[i] && (str[i] < '0' || str[i] > '9'))
+		i++;
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - '0');
+		i++;
+	}
+	return (isneg * result);
 }
 
-bool	only_numbers(char **argv, int i)
+long	*make_long_array(int argc, char **argv)
 {
+	long		*res;
+	int		i;
+	int		j;
+	long	nbr;
+
+	i = 1;
+	j = 0;
+	res = malloc(sizeof(long) * (argc - 1));
+	if (!res)
+		return (NULL);
 	while (argv[i])
 	{
-		if (!is_number(argv[i]))
+		nbr = ft_atol(argv[i]);
+		if (!check_max_int(nbr))
 		{
-			print_error("Please check your input parameters ",
-				"only numbers must be provided!");
-			return (false);
+			free(res);
+			return (NULL);
 		}
+		res[j] = nbr;
 		i++;
+		j++;
 	}
-	return (true);
+	return (res);
 }
 
-bool	check_min_max_int(long l)
+int	init_input(t_data *data, char **argv, int argc)
 {
-	if (l < INT_MIN || l > INT_MAX)
-	{
-		print_error("Please make sure your input parameters ",
-			"are within INT_MIN INT_MAX limits!");
-		return (false);
-	}
-	return (true);
+	long *result;
+
+	result = make_long_array(argc, argv);
+	if (!result)
+		return (error_handling("Please check your input params!\n"));
+	data->nbr_of_philo = result[0];
+	data->time_to_die = result[1] * 1000;
+	data->time_to_eat = result[2] * 1000;
+	data->time_to_sleep = result[3] * 1000;
+	if (result[4])
+		data->nbr_max_meals = result[4];
+	else
+		data->nbr_max_meals = -1;
+	return (0);
 }

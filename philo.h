@@ -57,5 +57,6 @@ typedef struct s_data
 }	t_data;
 
 int	error_handling(char *message);
+int	init_input(t_data *data, char **argv, int argc);
 
 #endif

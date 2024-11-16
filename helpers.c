@@ -14,6 +14,6 @@
 
 int	error_handling(char *message)
 {
-	ft_printf("Error: %s\n", message);
+	printf("Error: %s\n", message);
 	return (-1);
 }
