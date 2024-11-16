@@ -12,15 +12,6 @@
 
 #include "philo.h"
 
-// void initial_init_data(t_data data)
-// {
-// 	data.nbr_of_philo = 0;
-// 	data.time_to_die = 0;
-// 	data.time_to_eat = 0;
-// 	data.time_to_sleep = 0;
-// 	//data.nbr_max_meals = NULL;
-// }
-
 int	main(int argc, char **argv)
 {
 	t_data *data;
