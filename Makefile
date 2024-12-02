@@ -12,7 +12,8 @@
 
 MY_SOURCES = philo.c \
 			helpers.c \
-			input_validation.c
+			input_validation.c \
+			init.c
 			
 
 MY_OBJECTS = $(MY_SOURCES:.c=.o)

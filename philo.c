@@ -23,11 +23,12 @@ int	main(int argc, char **argv)
 			return (error_handling("Memory allocation failed!"));
 		if (init_input(data, argv, argc) != -1)
 		{
-		printf("nbr of philo %ld\n", data->nbr_of_philo);
-		printf("time to die %ld\n", data->time_to_die);
-		printf("time to eat %ld\n", data->time_to_eat);
-		printf("time to sleep %ld\n", data->time_to_sleep);
-		printf("max meals %ld\n", data->nbr_max_meals);
+		if (init_data(data) != 0)
+		{
+			free(data);
+			return (error_handling("Init failed"));
+		}
+		//satrt the process
 		}
 		free(data);
 	}

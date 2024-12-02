@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-bool	check_max_int(long l)
+static bool	check_max_int(long l)
 {
 	if (l < 0|| l > INT_MAX)
 	{
@@ -22,7 +22,7 @@ bool	check_max_int(long l)
 	return (true);
 }
 
-long	ft_atol(const char *str)
+static long	ft_atol(const char *str)
 {
 	int		i;
 	long	result;
@@ -51,7 +51,7 @@ long	ft_atol(const char *str)
 	return (isneg * result);
 }
 
-long	*make_long_array(int argc, char **argv)
+static long	*make_long_array(int argc, char **argv)
 {
 	long		*res;
 	int		i;
@@ -80,7 +80,7 @@ long	*make_long_array(int argc, char **argv)
 
 int	init_input(t_data *data, char **argv, int argc)
 {
-	long *result;
+	long	*result;
 
 	result = make_long_array(argc, argv);
 	if (!result)

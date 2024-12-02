@@ -37,8 +37,8 @@ typedef struct s_philo
 	long		meals_count;
 	bool		is_max_meals;
 	long		last_meal_time;
-	t_fork		*left_f;
-	t_fork		*right_f;
+	t_fork		*fork_1;
+	t_fork		*fork_2;
 	pthread_t	thread_id;
 	t_data		*data;
 }	t_philo;
@@ -54,9 +54,12 @@ typedef struct s_data
 	long	nbr_max_meals;
 	long	start_process;
 	bool	end_process;
+	bool	threads_ready;
+	t_mutex	data_mutex;
 }	t_data;
 
 int	error_handling(char *message);
 int	init_input(t_data *data, char **argv, int argc);
+int	init_data(t_data *data);
 
 #endif
