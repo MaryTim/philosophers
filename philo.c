@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:21:27 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/11/13 16:27:19 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:34:03 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ int	main(int argc, char **argv)
 			free(data);
 			return (error_handling("Init failed"));
 		}
-		//satrt the process
+		//start process
+		if (start_process(data) == 0)
+		{
+			
+		}
 		}
 		free(data);
 	}

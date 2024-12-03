@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 16:49:11 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/11/13 16:49:23 by mbudkevi         ###   ########.fr       */
+/*   Created: 2024/12/03 12:11:24 by mbudkevi          #+#    #+#             */
+/*   Updated: 2024/12/03 12:11:26 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	assign_forks(t_philo *philo, t_fork *forks, int philo_pos)
 
 static void	init_philo(t_data *data)
 {
-	int	i;
+	int		i;
 	t_philo	*philo;
 
 	i = 0;

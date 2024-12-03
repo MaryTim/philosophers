@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 19:21:57 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/11/13 16:19:47 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:50:30 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,16 @@ typedef struct s_fork
 	int		fork_id;
 }	t_fork;
 
+typedef enum e_philo_state
+{
+	EAT,
+	SLEEP,
+	THINK,
+	TAKE_FORK_1,
+	TAKE_FORK_2,
+	DIE
+}	t_philo_state;
+
 typedef struct s_philo
 {
 	int			id;
@@ -52,14 +62,18 @@ typedef struct s_data
 	long	time_to_eat;
 	long	time_to_sleep;
 	long	nbr_max_meals;
-	long	start_process;
+	long long	start_process;
 	bool	end_process;
 	bool	threads_ready;
 	t_mutex	data_mutex;
+	t_mutex	write_mutex;
 }	t_data;
 
-int	error_handling(char *message);
-int	init_input(t_data *data, char **argv, int argc);
-int	init_data(t_data *data);
+int			error_handling(char *message);
+int			init_input(t_data *data, char **argv, int argc);
+int			init_data(t_data *data);
+long long	get_time(void);
+int			start_process(t_data *data);
+void		write_status(t_philo *philo, t_philo_state state);
 
 #endif

@@ -6,14 +6,15 @@
 #    By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/22 17:51:53 by mbudkevi          #+#    #+#              #
-#    Updated: 2024/06/08 20:44:41 by mbudkevi         ###   ########.fr        #
+#    Updated: 2024/12/03 12:31:58 by mbudkevi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 MY_SOURCES = philo.c \
 			helpers.c \
 			input_validation.c \
-			init.c
+			init.c \
+			process.c
 			
 
 MY_OBJECTS = $(MY_SOURCES:.c=.o)
