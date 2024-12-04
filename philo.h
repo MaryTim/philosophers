@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 19:21:57 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/03 14:50:30 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:04:25 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_philo
 	t_fork		*fork_2;
 	pthread_t	thread_id;
 	t_data		*data;
+	t_mutex		philo_mutex;
 }	t_philo;
 
 typedef struct s_data
@@ -65,8 +66,10 @@ typedef struct s_data
 	long long	start_process;
 	bool	end_process;
 	bool	threads_ready;
+	long	thread_running_nbr;
 	t_mutex	data_mutex;
 	t_mutex	write_mutex;
+	pthread_t	monitor;
 }	t_data;
 
 int			error_handling(char *message);
@@ -75,5 +78,6 @@ int			init_data(t_data *data);
 long long	get_time(void);
 int			start_process(t_data *data);
 void		write_status(t_philo *philo, t_philo_state state);
+bool		is_process_finished(t_philo *philo);
 
 #endif

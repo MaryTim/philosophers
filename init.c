@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:11:24 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/03 12:11:26 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:05:05 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ static void	init_philo(t_data *data)
 		philo->data = data;
 		philo->last_meal_time = 0;
 		assign_forks(philo, data->forks, i);
+		if (pthread_mutex_init(&philo->philo_mutex, NULL) != 0)
+		{
+			error_handling("Something went wrong with philo mutex init");
+			return ;
+		}
 		i++;
 	}
 }
@@ -50,6 +55,7 @@ int	init_data(t_data *data)
 	data->end_process = false;
 	data->threads_ready = false;
 	data->philos = malloc(sizeof(t_philo) * data->nbr_of_philo);
+	data->thread_running_nbr = 0;
 	if (pthread_mutex_init(&data->data_mutex, NULL) != 0)
 			return (error_handling("Something went wrong with data mutex init"));
 	if (!(data->philos))
