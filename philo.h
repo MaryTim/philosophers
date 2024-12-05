@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 19:21:57 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/04 17:04:25 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:36:22 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int			init_data(t_data *data);
 long long	get_time(void);
 int			start_process(t_data *data);
 void		write_status(t_philo *philo, t_philo_state state);
-bool		is_process_finished(t_philo *philo);
+bool		is_process_finished(t_data *data);
+bool		all_threads_running(long philo_nbr, long *threads, t_mutex *mutex);
 
 #endif

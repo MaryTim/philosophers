@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:19:17 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/04 16:31:25 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:36:12 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,37 @@ long long	get_time(void)
 	return ((long long)(tv.tv_sec) * 1000 + (long long)(tv.tv_usec) / 1000);
 }
 
-bool	is_process_finished(t_philo *philo)
+bool	all_threads_running(long philo_nbr, long *threads, t_mutex *mutex)
+{
+	bool	res;
+
+	res = false;
+	if (pthread_mutex_lock(&mutex) != 0)
+	{
+		error_handling("Failed to lock mutex in all_threads_running");
+		return false;
+	}
+	if (philo_nbr == *threads)
+		res = true;
+	if (pthread_mutex_unlock(&mutex) != 0)
+	{
+		error_handling("Failed to unlock mutex in all_threads_running");
+		return false;
+	}
+	return (res);
+}
+
+bool	is_process_finished(t_data *data)
 {
 	bool	is_process_finished;
 
-	if (pthread_mutex_lock(&philo->data->data_mutex) != 0)
+	if (pthread_mutex_lock(&data->data_mutex) != 0)
 	{
 		error_handling("Failed to lock mutex in write_status");
 		return false;
 	}
-	is_process_finished = philo->data->end_process;
-	if (pthread_mutex_unlock(&philo->data->data_mutex) != 0)
+	is_process_finished = data->end_process;
+	if (pthread_mutex_unlock(&data->data_mutex) != 0)
 	{
 		error_handling("Failed to unlock mutex in write_status");
 		return false;

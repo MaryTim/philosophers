@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:11:33 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/04 17:09:26 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:53:49 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void	*routine(void *data)
 	philo = (t_philo *)data;
 	wait_all_threads(philo->data);
 
+	//increase number of running threads
 	if (pthread_mutex_lock(&philo->data->data_mutex) != 0)
 	{
 		error_handling("Failed to lock mutex in routine");
@@ -122,7 +123,7 @@ void	*routine(void *data)
 		return ;
 	}
 	
-	while(!is_process_finished(philo))
+	while(!is_process_finished(philo->data))
 	{
 		// if (philo->is_max_meals) //???
 		// 	break ;
@@ -137,11 +138,59 @@ void	*routine(void *data)
 	return (0);
 }
 
+bool	philo_died(t_philo *philo)
+{
+	long	elapsed;
+	long	last_meal;
+	bool	is_dead;
+
+	is_dead = false;
+	if (pthread_mutex_lock(&philo->philo_mutex) != 0)
+	{
+		error_handling("mutex lock at philo_died func failed!");
+		return (false);
+	}
+	last_meal = philo->last_meal_time;
+	if (pthread_mutex_unlock(&philo->philo_mutex) != 0)
+	{
+		error_handling("mutex unlock at philo_died func failed!");
+		return (false);
+	}
+
+	return (is_dead);
+}
+
 void	*monitor(void *value)
 {
 	t_data	*data;
-	data = (t_data *)value;
+	int		i;
 
+	data = (t_data *)value;
+	while (!all_threads_running(data->nbr_of_philo, &data->thread_running_nbr, &data->data_mutex))
+		;
+	while (!is_process_finished(data))
+	{
+		i = 0;
+		while(i < data->nbr_of_philo && !is_process_finished(data))
+		{
+			if (philo_died(data->philos + i))
+			{
+				if (pthread_mutex_lock(&data->data_mutex) != 0)
+				{
+					error_handling("mutex lock at monitor func failed!");
+					return ;
+				}
+				data->end_process = true;
+				if (pthread_mutex_unlock(&data->data_mutex) != 0)
+				{
+					error_handling("mutex unlock at monitor func failed!");
+					return ;
+				}
+				write_status(data->philos + i, DIE);
+			}
+			i++;
+		}
+	}
 	return (0);
 }
 
