@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 19:21:57 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/05 13:36:22 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:29:07 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <limits.h>
+# include <stdint.h>
 
 # define PHILO_H
 
@@ -46,7 +47,7 @@ typedef struct s_philo
 	int			id;
 	long		meals_count;
 	bool		is_max_meals;
-	long		last_meal_time;
+	long long	last_meal_time;
 	t_fork		*fork_1;
 	t_fork		*fork_2;
 	pthread_t	thread_id;

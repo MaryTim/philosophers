@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:19:17 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/05 13:36:12 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:19:10 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ bool	all_threads_running(long philo_nbr, long *threads, t_mutex *mutex)
 	bool	res;
 
 	res = false;
-	if (pthread_mutex_lock(&mutex) != 0)
+	if (pthread_mutex_lock(mutex) != 0)
 	{
 		error_handling("Failed to lock mutex in all_threads_running");
 		return false;
 	}
 	if (philo_nbr == *threads)
 		res = true;
-	if (pthread_mutex_unlock(&mutex) != 0)
+	if (pthread_mutex_unlock(mutex) != 0)
 	{
 		error_handling("Failed to unlock mutex in all_threads_running");
 		return false;

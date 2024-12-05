@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:11:33 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/05 13:53:49 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:29:48 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,30 +103,39 @@ void	think(t_philo *philo)
 	write_status(philo, THINK);
 }
 
-void	*routine(void *data)
+void	*routine(void *value)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *)data;
+	philo = (t_philo *)value;
 	wait_all_threads(philo->data);
+
+	//set last meal time
+	if (pthread_mutex_lock(&philo->philo_mutex) != 0)
+	{
+		return (void *)(intptr_t)(error_handling("Failed to lock mutex in routine last meal time"));
+	}
+	philo->last_meal_time = get_time();
+	if (pthread_mutex_unlock(&philo->philo_mutex) != 0)
+	{
+		return (void *)(intptr_t)(error_handling("Failed to unlock mutex in routine last meal time"));
+	}
 
 	//increase number of running threads
 	if (pthread_mutex_lock(&philo->data->data_mutex) != 0)
 	{
-		error_handling("Failed to lock mutex in routine");
-		return ;
+		return (void *)(intptr_t)(error_handling("Failed to lock mutex in routine"));
 	}
 	philo->data->thread_running_nbr++;
 	if (pthread_mutex_unlock(&philo->data->data_mutex) != 0)
 	{
-		error_handling("Failed to unlock mutex in routine");
-		return ;
+		return (void *)(intptr_t)(error_handling("Failed to unlock mutex in routine"));
 	}
-	
 	while(!is_process_finished(philo->data))
 	{
 		// if (philo->is_max_meals) //???
 		// 	break ;
+		
 		//eat
 		eat(philo);
 		//sleep
@@ -138,9 +147,39 @@ void	*routine(void *data)
 	return (0);
 }
 
+void	*one_philo(void *value)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)value;
+	wait_all_threads(philo->data);
+
+	if (pthread_mutex_lock(&philo->philo_mutex) != 0)
+		return (void *)(intptr_t)(error_handling("mutex lock at one_philo failed!"));
+	philo->last_meal_time = get_time();
+	if (pthread_mutex_unlock(&philo->philo_mutex) != 0)
+		return (void *)(intptr_t)(error_handling("mutex unlock at one_philo failed!"));
+
+	//increase number of running threads
+	if (pthread_mutex_lock(&philo->data->data_mutex) != 0)
+	{
+		return (void *)(intptr_t)(error_handling("Failed to lock mutex in routine"));
+	}
+	philo->data->thread_running_nbr++;
+	if (pthread_mutex_unlock(&philo->data->data_mutex) != 0)
+	{
+		return (void *)(intptr_t)(error_handling("Failed to unlock mutex in routine"));
+	}
+
+	write_status(philo, TAKE_FORK_1);
+	while(!is_process_finished(philo->data))
+		usleep(200);
+	return (NULL);
+}
+
 bool	philo_died(t_philo *philo)
 {
-	long	elapsed;
+	long long	elapsed;
 	long	last_meal;
 	bool	is_dead;
 
@@ -156,7 +195,24 @@ bool	philo_died(t_philo *philo)
 		error_handling("mutex unlock at philo_died func failed!");
 		return (false);
 	}
+	elapsed = get_time() - (long long)last_meal;
+	if (elapsed > (long long)philo->data->time_to_die)
+		is_dead = true;
 
+
+	// do we need to check he's full?
+	if (pthread_mutex_lock(&philo->philo_mutex) != 0)
+	{
+		error_handling("mutex lock at philo_died func failed!");
+		return (false);
+	}
+	if (philo->is_max_meals)
+		is_dead = false;
+	if (pthread_mutex_unlock(&philo->philo_mutex) != 0)
+	{
+		error_handling("mutex unlock at philo_died func failed!");
+		return (false);
+	}
 	return (is_dead);
 }
 
@@ -177,14 +233,12 @@ void	*monitor(void *value)
 			{
 				if (pthread_mutex_lock(&data->data_mutex) != 0)
 				{
-					error_handling("mutex lock at monitor func failed!");
-					return ;
+					return (void *)(intptr_t)(error_handling("mutex lock at monitor func failed!"));
 				}
 				data->end_process = true;
 				if (pthread_mutex_unlock(&data->data_mutex) != 0)
 				{
-					error_handling("mutex unlock at monitor func failed!");
-					return ;
+					return (void *)(intptr_t)(error_handling("mutex unlock at monitor func failed!"));
 				}
 				write_status(data->philos + i, DIE);
 			}
@@ -203,7 +257,8 @@ int	start_process(t_data *data)
 		(error_handling("max number of meals is 0"));
 	else if (data->nbr_of_philo == 1)
 	{
-			// handle 1 philo
+		if (pthread_create(&data->philos[0].thread_id, NULL, &one_philo, &data->philos[0]) != 0)
+			return (error_handling("pthread_create 1 philo thread failed"));
 	}
 	else
 	{
