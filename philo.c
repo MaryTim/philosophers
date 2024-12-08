@@ -14,25 +14,25 @@
 
 int	main(int argc, char **argv)
 {
-	t_data *data;
+	t_philo	*philos;
+	t_philo	*monitor;
 
 	if ((argc == 5) || (argc == 6))
 	{
-		data = malloc(sizeof(t_data));
-		if (!data)
-			return (error_handling("Memory allocation failed!"));
-		if (init_input(data, argv, argc) != -1)
-		{
-		if (init_data(data) != 0)
-		{
-			free(data);
-			return (error_handling("Init failed"));
-		}
-		if (start_process(data) != 0)
-			return (error_handling("Can't start the process!"));
-		}
-		free(data);
+        philos = setup_simulation(argc, argv);
+        if (!philos)
+            return (error_handling("Simulation init failed.\n"));
+        printf("data:%lld\n ", philos[0].last_meal_time[0]);
+        monitor = init_monitor(philos);
+        if (!monitor)
+             return (error_handling("Monitor init failed.\n"));
+        attach_monitor(philos, monitor);
+        create_threads(philos);
+        pthread_create(&monitor->thread, NULL, check_health, monitor);
+        pthread_join(monitor->thread, NULL);
+        return (free_memory(philos, monitor), 0);
 	}
 	else
 		error_handling("Please check your input parameters!");
 }
+

@@ -11,11 +11,12 @@
 # **************************************************************************** #
 
 MY_SOURCES = philo.c \
-			helpers.c \
-			input_validation.c \
-			init.c \
-			process.c
-			
+			utils/helpers.c \
+			utils/input_validation.c \
+			utils/init_utils.c \
+			process_init.c \
+			monitor.c \
+			threads.c		
 
 MY_OBJECTS = $(MY_SOURCES:.c=.o)
 

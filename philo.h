@@ -20,66 +20,50 @@
 # include <sys/time.h>
 # include <limits.h>
 # include <stdint.h>
+# include <string.h>
+# include <stdbool.h>
 
 # define PHILO_H
 
-typedef pthread_mutex_t t_mutex;
-typedef struct s_data t_data;
+# define RESET      "\033[0m"
+# define RED        "\033[31m"
+# define GREEN      "\033[32m"
+# define YELLOW     "\033[33m"
+# define BLUE       "\033[34m"
+# define MAGENTA    "\033[35m"
+# define CYAN       "\033[36m"
 
-typedef struct s_fork
-{
-	t_mutex	fork;
-	int		fork_id;
-}	t_fork;
-
-typedef enum e_philo_state
-{
-	EAT,
-	SLEEP,
-	THINK,
-	TAKE_FORK_1,
-	TAKE_FORK_2,
-	DIE
-}	t_philo_state;
-
+// philo Struct
 typedef struct s_philo
 {
-	int			id;
-	long		meals_count;
-	bool		is_max_meals;
-	long long	last_meal_time;
-	t_fork		*fork_1;
-	t_fork		*fork_2;
-	pthread_t	thread_id;
-	t_data		*data;
-	t_mutex		philo_mutex;
+	int				philo_id;
+	int				*meals_count;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				meals_required;
+	long long		*last_meal_time;
+	int				forks_nbr;
+	int				philos_nbr;
+	pthread_t		thread;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	*state_mutex;
+	long long		sim_start_time;
 }	t_philo;
 
-typedef struct s_data
-{
-	t_fork	*forks;
-	t_philo	*philos;
-	long	nbr_of_philo;
-	long	time_to_die;
-	long	time_to_eat;
-	long	time_to_sleep;
-	long	nbr_max_meals;
-	long long	start_process;
-	bool	end_process;
-	bool	threads_ready;
-	long	thread_running_nbr;
-	t_mutex	data_mutex;
-	t_mutex	write_mutex;
-	pthread_t	monitor;
-}	t_data;
-
-int			error_handling(char *message);
-int			init_input(t_data *data, char **argv, int argc);
-int			init_data(t_data *data);
+int	error_handling(char *message);
+bool	is_numeric(char *str);
+int	str_to_int(char *str);
+int	parse_input(int argc, char **argv, t_philo *inited_data);
 long long	get_time(void);
-int			start_process(t_data *data);
-void		write_status(t_philo *philo, t_philo_state state);
-bool		is_process_finished(t_data *data);
-bool		all_threads_running(long philo_nbr, long *threads, t_mutex *mutex);
+t_philo	*setup_simulation(int argc, char **argv);
+t_philo	*init_monitor(t_philo *philo);
+void	attach_monitor(t_philo *philos, t_philo *monitor);
+void	create_threads(t_philo *philos);
+void	sleep_for(long long time);
+void	print_status_message(t_philo *philo, char *action);
+void	*check_health(void *data);
+void	has_died(int philo_id, long long elapsed_time);
+void	free_memory(t_philo *philos, t_philo *monitor);
 
 #endif
