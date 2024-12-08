@@ -43,8 +43,6 @@ static int validate_input(char **argv, int argc)
 
 int	parse_input(int argc, char **argv, t_philo *inited_data)
 {
-	if (argc < 5 || argc > 6)
-		return (error_handling("Please check amount of input params"));
     if (validate_input(argv, argc) == 0) {
 	inited_data->philos_nbr = str_to_int(argv[1]);
 	inited_data->time_to_die = str_to_int(argv[2]);

@@ -33,6 +33,6 @@ int	main(int argc, char **argv)
         return (free_memory(philos, monitor), 0);
 	}
 	else
-		error_handling("Please check your input parameters!");
+		error_handling("Please check amount of your input parameters!");
 }
 
