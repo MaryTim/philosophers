@@ -14,9 +14,9 @@ MY_SOURCES = philo.c \
 			utils/helpers.c \
 			utils/input_validation.c \
 			utils/init_utils.c \
-			process_init.c \
+			process.c \
 			monitor.c \
-			threads.c		
+			actions.c		
 
 MY_OBJECTS = $(MY_SOURCES:.c=.o)
 

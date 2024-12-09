@@ -12,46 +12,71 @@
 
 #include "../philo.h"
 
-static int	validate_philo_count(char *arg)
+void	assign_forks(t_data *data, t_philo *philo, int pos)
 {
-	if (!is_numeric(arg) || str_to_int(arg) <= 0)
-        return (error_handling("Invalid number of philos!"));
-	return (0);
-}
-
-static int	validate_time(char *arg)
-{
-	if (!is_numeric(arg) || str_to_int(arg) <= 0)
-        return (error_handling("Invalid time parameter!"));
-	return (0);
-}
-
-static int	validate_meals_required(char *arg)
-{
-	if (!is_numeric(arg) || str_to_int(arg) <= 0)
-	    return (error_handling("Invalid parameter of required meals!"));
-	return (0);
-}
-
-static int validate_input(char **argv, int argc)
-{
-    if (validate_philo_count(argv[1]) != 0 || validate_time(argv[2]) != 0 || validate_time(argv[3]) != 0
-        || validate_time(argv[4]) != 0 || (argc == 6 && validate_meals_required(argv[5]) != 0))
-            return (-1);
-    return (0);
-}
-
-int	parse_input(int argc, char **argv, t_philo *inited_data)
-{
-    if (validate_input(argv, argc) == 0) {
-	inited_data->philos_nbr = str_to_int(argv[1]);
-	inited_data->time_to_die = str_to_int(argv[2]);
-	inited_data->time_to_eat = str_to_int(argv[3]);
-	inited_data->time_to_sleep = str_to_int(argv[4]);
-	if (argc == 6)
-		inited_data->meals_required = str_to_int(argv[5]);
+	if (philo->id % 2 == 0)
+	{
+		philo->fork_1 = &data->forks[pos];
+		philo->fork_2 = &data->forks[(pos + 1) % data->philo_nbr];
+	}
 	else
-		inited_data->meals_required = -1;
-    }
-	return (0);
+	{
+		philo->fork_1 = &data->forks[(pos + 1) % data->philo_nbr];
+		philo->fork_2 = &data->forks[pos];
+	}
+}
+
+void	init_philos(t_data *data)
+{
+	int		i;
+	t_philo	*philo;
+
+	data->philos = malloc(sizeof(t_philo) * data->philo_nbr);
+	if (!data->philos)
+		return ;
+	i = 0;
+	while (i < data->philo_nbr)
+	{
+		philo = &data->philos[i];
+		philo->id = i + 1;
+		philo->data = data;
+		philo->is_eating = false;
+		philo->meals = 0;
+		assign_forks(data, philo, i);
+		pthread_mutex_init(&philo->mutex, NULL);
+		i++;
+	}
+}
+
+void	init_forks(t_data *data)
+{
+	int	i;
+
+	data->forks = malloc(sizeof(t_fork) * data->philo_nbr);
+	if (!data->forks)
+		return ;
+	i = 0;
+	while (i < data->philo_nbr)
+	{
+		data->forks[i].id = i;
+		pthread_mutex_init(&data->forks[i].mutex, NULL);
+		i++;
+	}
+}
+
+void	assign_data(t_data *data, char **argv, int argc)
+{
+	data->is_finished = false;
+	data->threads_ready = false;
+	data->philo_nbr = validate_input(argv[0]);
+	data->time_to_die = validate_input(argv[1]) * 1000;
+	data->time_to_eat = validate_input(argv[2]) * 1000;
+	data->time_to_sleep = validate_input(argv[3]) * 1000;
+	if (argc == 6)
+		data->max_meals = validate_input(argv[4]);
+	else
+		data->max_meals = -1;
+	init_forks(data);
+	init_philos(data);
+	pthread_mutex_init(&data->mutex, NULL);
 }

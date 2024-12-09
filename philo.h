@@ -33,37 +33,56 @@
 # define MAGENTA    "\033[35m"
 # define CYAN       "\033[36m"
 
-// philo Struct
+typedef pthread_t		t_thrd;
+typedef pthread_mutex_t	t_mtx;
+
+typedef struct s_philo	t_philo;
+typedef struct s_fork	t_fork;
+typedef struct s_data	t_data;
+
 typedef struct s_philo
 {
-	int				philo_id;
-	int				*meals_count;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				meals_required;
-	long long		*last_meal_time;
-	int				forks_nbr;
-	int				philos_nbr;
-	pthread_t		thread;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	*state_mutex;
-	long long		sim_start_time;
+	long	id;
+	long	last_meal;
+	long	meals;
+	bool	is_eating;
+	t_fork	*fork_1;
+	t_fork	*fork_2;
+	t_data	*data;
+	t_mtx	mutex;
+	t_thrd	thread;
 }	t_philo;
 
+typedef struct s_fork
+{
+	long	id;
+	t_mtx	mutex;
+}	t_fork;
+
+typedef struct s_data
+{
+	long	philo_nbr;
+	long	time_to_die;
+	long	time_to_eat;
+	long	time_to_sleep;
+	long	max_meals;
+	long	start_time;
+	bool	threads_ready;
+	bool	is_finished;
+	t_fork	*forks;
+	t_philo	*philos;
+	t_thrd	monitor;
+	t_mtx	mutex;
+}	t_data;
+
 int	error_handling(char *message);
-bool	is_numeric(char *str);
-int	str_to_int(char *str);
-int	parse_input(int argc, char **argv, t_philo *inited_data);
-long long	get_time(void);
-t_philo	*setup_simulation(int argc, char **argv);
-t_philo	*init_monitor(t_philo *philo);
-void	attach_monitor(t_philo *philos, t_philo *monitor);
-void	create_threads(t_philo *philos);
-void	sleep_for(long long time);
-void	print_status_message(t_philo *philo, char *action);
-void	*check_health(void *data);
-void	has_died(int philo_id, long long elapsed_time);
-void	free_memory(t_philo *philos, t_philo *monitor);
+int	validate_input(char *argv);
+void	assign_data(t_data *data, char **argv, int argc);
+long	get_time(void);
+long	get_timestamp(long time);
+void	start_process(t_data *data);
+void	*routine(void *value);
+void	*monitor(void *value);
+void	free_memory(t_data *data);
 
 #endif

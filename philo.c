@@ -14,25 +14,14 @@
 
 int	main(int argc, char **argv)
 {
-	t_philo	*philos;
-	t_philo	*monitor;
+	t_data	data;
 
 	if ((argc == 5) || (argc == 6))
 	{
-        philos = setup_simulation(argc, argv);
-        if (!philos)
-            return (error_handling("Simulation init failed.\n"));
-        printf("data:%lld\n ", philos[0].last_meal_time[0]);
-        monitor = init_monitor(philos);
-        if (!monitor)
-             return (error_handling("Monitor init failed.\n"));
-        attach_monitor(philos, monitor);
-        create_threads(philos);
-        pthread_create(&monitor->thread, NULL, check_health, monitor);
-        pthread_join(monitor->thread, NULL);
-        return (free_memory(philos, monitor), 0);
+        assign_data(&data, argv + 1, argc);
+	    start_process(&data);
+	    free_memory(&data);
 	}
 	else
 		error_handling("Please check amount of your input parameters!");
 }
-
