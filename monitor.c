@@ -41,7 +41,8 @@ void	has_died(t_data *data)
 			&& !philo->is_eating)
 		{
 			pthread_mutex_lock(&data->mutex);
-			printf("%ld %ld died\n", get_timestamp(data->start_time), philo->id);
+			announce_death(philo->id, get_timestamp(data->start_time));
+			//printf("%ld %ld died\n", get_timestamp(data->start_time), philo->id);
 			data->is_finished = true;
 			pthread_mutex_unlock(&data->mutex);
 			return ;

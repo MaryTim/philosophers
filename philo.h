@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 19:21:57 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/05 18:29:07 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:15:36 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ long	get_timestamp(long time);
 void	start_process(t_data *data);
 void	*routine(void *value);
 void	*monitor(void *value);
+void	announce_death(int philo_id, long elapsed_time);
 void	free_memory(t_data *data);
-void print_status_message(t_philo *philo, const char *message);
+void print_status_message(t_philo *philo, char *message);
+
 
 #endif

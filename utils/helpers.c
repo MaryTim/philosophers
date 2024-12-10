@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:19:17 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/05 18:19:10 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:19:40 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,28 +62,7 @@ void	print_number_fd(int n, int fd)
 	}
 }
 
-// void	print_status_message(t_philo *philo, char *action)
-// {
-// 	char	*colors[6];
-
-// 	colors[0] = RED;
-// 	colors[1] = GREEN;
-// 	colors[2] = YELLOW;
-// 	colors[3] = BLUE;
-// 	colors[4] = MAGENTA;
-// 	colors[5] = CYAN;
-// 	write(1, colors[philo->philo_id % 6],
-// 		str_len(colors[philo->philo_id % 6]));
-// 	print_number_fd(get_time() - philo->sim_start_time, 1);
-// 	write(1, "\t", 1);
-// 	print_number_fd(philo->philo_id, 1);
-// 	write(1, "\t", 1);
-// 	write(1, action, str_len(action));
-// 	write(1, RESET, str_len(RESET));
-// 	write(1, "\n", 1);
-// }
-
-void print_status_message(t_philo *philo, const char *message)
+void	print_status_message(t_philo *philo, char *message)
 {
 	char	*colors[6];
 
@@ -93,25 +72,42 @@ void print_status_message(t_philo *philo, const char *message)
 	colors[3] = BLUE;
 	colors[4] = MAGENTA;
 	colors[5] = CYAN;
-	// Get Philosopher's Unique Color
-	const char *color = colors[(philo->id - 1) % 6];
-
-	// Print Message with Timestamp
-	printf("%s%-8ld Philosopher %ld %s%s\n", color, 
-	       get_time() - philo->data->start_time, philo->id, message, RESET);
-
-	fflush(stdout);  // Ensure Immediate Output
+	write(1, colors[philo->id % 6],
+		str_len(colors[philo->id % 6]));
+	print_number_fd(get_time() - philo->data->start_time, 1);
+	write(1, "\t", 1);
+	write(1, "Philosopher ", 12);
+	print_number_fd(philo->id, 1);
+	write(1, "\t", 1);
+	write(1, message, str_len(message));
+	write(1, RESET, str_len(RESET));
+	write(1, "\n", 1);
 }
 
-// void	has_died(int philo_id, long long elapsed_time)
+// void print_status_message(t_philo *philo, const char *message)
 // {
-// 	print_number_fd(elapsed_time, 1);
-// 	write(1, "\t", 1);
-// 	print_number_fd(philo_id, 1);
-// 	write(1, "\t", 1);
-// 	write(1, "died", 4);
-// 	write(1, "\n", 1);
+// 	char	*colors[6];
+
+// 	colors[0] = RED;
+// 	colors[1] = GREEN;
+// 	colors[2] = YELLOW;
+// 	colors[3] = BLUE;
+// 	colors[4] = MAGENTA;
+// 	colors[5] = CYAN;
+// 	// Get Philosopher's Unique Color
+// 	const char *color = colors[(philo->id - 1) % 6];
+
+// 	// Print Message with Timestamp
+// 	printf("%s%-8ld Philosopher %ld %s%s\n", color, 
+// 	       get_time() - philo->data->start_time, philo->id, message, RESET);
+
+// 	fflush(stdout);  // Ensure Immediate Output
 // }
+
+void	announce_death(int philo_id, long elapsed_time)
+{
+	printf("%-7ld Philosopher %d\t%s\n", elapsed_time, philo_id, "has died");
+}
 
 void	free_memory(t_data *data)
 {
