@@ -6,7 +6,7 @@
 #    By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/22 17:51:53 by mbudkevi          #+#    #+#              #
-#    Updated: 2024/12/03 12:31:58 by mbudkevi         ###   ########.fr        #
+#    Updated: 2024/12/10 14:26:32 by mbudkevi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ MY_SOURCES = philo.c \
 			utils/helpers.c \
 			utils/input_validation.c \
 			utils/init_utils.c \
+			utils/print_message.c \
 			process.c \
 			monitor.c \
 			actions.c		

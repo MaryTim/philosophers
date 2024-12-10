@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 19:21:57 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/12/10 13:15:36 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:23:58 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ typedef struct s_data
 	t_mtx	mutex;
 }	t_data;
 
-int	error_handling(char *message);
-int	validate_input(char *argv);
+void	*error_handling(char *message, void *return_value);
+int		validate_input(char *argv);
 void	assign_data(t_data *data, char **argv, int argc);
 long	get_time(void);
 long	get_timestamp(long time);
@@ -85,7 +85,6 @@ void	*routine(void *value);
 void	*monitor(void *value);
 void	announce_death(int philo_id, long elapsed_time);
 void	free_memory(t_data *data);
-void print_status_message(t_philo *philo, char *message);
-
+void	print_status_message(t_philo *philo, char *message);
 
 #endif

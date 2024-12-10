@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitor.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/10 14:24:04 by mbudkevi          #+#    #+#             */
+/*   Updated: 2024/12/10 14:24:10 by mbudkevi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	check_meals(t_data *data)
@@ -18,7 +30,7 @@ void	check_meals(t_data *data)
 			all_full = false;
 			break ;
 		}
-        i++;
+		i++;
 	}
 	if (all_full)
 	{
@@ -42,13 +54,12 @@ void	has_died(t_data *data)
 		{
 			pthread_mutex_lock(&data->mutex);
 			announce_death(philo->id, get_timestamp(data->start_time));
-			//printf("%ld %ld died\n", get_timestamp(data->start_time), philo->id);
 			data->is_finished = true;
 			pthread_mutex_unlock(&data->mutex);
 			return ;
 		}
 		usleep(1000);
-        i++;
+		i++;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: mbudkevi <mbudkevi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:49:11 by mbudkevi          #+#    #+#             */
-/*   Updated: 2024/11/13 16:49:23 by mbudkevi         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:24:46 by mbudkevi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ void	init_philos(t_data *data)
 		philo->is_eating = false;
 		philo->meals = 0;
 		assign_forks(data, philo, i);
-		pthread_mutex_init(&philo->mutex, NULL);
+		if (pthread_mutex_init(&philo->mutex, NULL) != 0)
+			error_handling("Init mutex failed in init_philos", NULL);
 		i++;
 	}
 }
@@ -59,7 +60,8 @@ void	init_forks(t_data *data)
 	while (i < data->philo_nbr)
 	{
 		data->forks[i].id = i;
-		pthread_mutex_init(&data->forks[i].mutex, NULL);
+		if (pthread_mutex_init(&data->forks[i].mutex, NULL) != 0)
+			error_handling("Init mutex failed in init forks", NULL);
 		i++;
 	}
 }
@@ -78,5 +80,6 @@ void	assign_data(t_data *data, char **argv, int argc)
 		data->max_meals = -1;
 	init_forks(data);
 	init_philos(data);
-	pthread_mutex_init(&data->mutex, NULL);
+	if (pthread_mutex_init(&data->mutex, NULL) != 0)
+		error_handling("Init mutex failed in assign_data", NULL);
 }
