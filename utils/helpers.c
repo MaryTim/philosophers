@@ -31,36 +31,36 @@ long	get_timestamp(long time)
 	return (get_time() - time);
 }
 
-// size_t	str_len(char *str)
-// {
-// 	size_t	i;
+size_t	str_len(char *str)
+{
+	size_t	i;
 
-// 	i = 0;
-// 	while (str[i])
-// 		i++;
-// 	return (i);
-// }
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
 
-// void	print_number_fd(int n, int fd)
-// {
-// 	char	c;
+void	print_number_fd(int n, int fd)
+{
+	char	c;
 
-// 	if (n < 0)
-// 	{
-// 		write(fd, "-", 1);
-// 		n = -n;
-// 	}
-// 	if (n >= 0 && n <= 9)
-// 	{
-// 		c = n + '0';
-// 		write(fd, &c, 1);
-// 	}
-// 	else
-// 	{
-// 		print_number_fd(n / 10, fd);
-// 		print_number_fd(n % 10, fd);
-// 	}
-// }
+	if (n < 0)
+	{
+		write(fd, "-", 1);
+		n = -n;
+	}
+	if (n >= 0 && n <= 9)
+	{
+		c = n + '0';
+		write(fd, &c, 1);
+	}
+	else
+	{
+		print_number_fd(n / 10, fd);
+		print_number_fd(n % 10, fd);
+	}
+}
 
 // void	print_status_message(t_philo *philo, char *action)
 // {
@@ -82,6 +82,26 @@ long	get_timestamp(long time)
 // 	write(1, RESET, str_len(RESET));
 // 	write(1, "\n", 1);
 // }
+
+void print_status_message(t_philo *philo, const char *message)
+{
+	char	*colors[6];
+
+	colors[0] = RED;
+	colors[1] = GREEN;
+	colors[2] = YELLOW;
+	colors[3] = BLUE;
+	colors[4] = MAGENTA;
+	colors[5] = CYAN;
+	// Get Philosopher's Unique Color
+	const char *color = colors[(philo->id - 1) % 6];
+
+	// Print Message with Timestamp
+	printf("%s%-8ld Philosopher %ld %s%s\n", color, 
+	       get_time() - philo->data->start_time, philo->id, message, RESET);
+
+	fflush(stdout);  // Ensure Immediate Output
+}
 
 // void	has_died(int philo_id, long long elapsed_time)
 // {

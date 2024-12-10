@@ -84,5 +84,6 @@ void	start_process(t_data *data);
 void	*routine(void *value);
 void	*monitor(void *value);
 void	free_memory(t_data *data);
+void print_status_message(t_philo *philo, const char *message);
 
 #endif
